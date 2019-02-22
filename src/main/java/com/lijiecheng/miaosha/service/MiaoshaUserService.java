@@ -85,7 +85,7 @@ public class MiaoshaUserService {
         redisService.set(MiaoshaUserKey.token,token,user);
 
         Cookie cookie = new Cookie(COOKI_NAME_TOKEN,token);
-        cookie.setMaxAge(MiaoshaUserKey.token.expireSecond());
+//        cookie.setMaxAge(MiaoshaUserKey.token.expireSecond());
         cookie.setPath("/");
         response.addCookie(cookie);
     }

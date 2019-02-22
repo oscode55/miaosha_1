@@ -14,8 +14,8 @@ import org.apache.ibatis.annotations.Select;
 public interface UserDao {
 
     @Select("select * from user where id=#{id}")
-    User getById(@Param("id") int id);
+    public User getById(@Param("id") int id);
 
     @Insert("insert into user(id,name) values(#{id},#{name})")
-    int insert(User user);
+    public int insert(User user);
 }

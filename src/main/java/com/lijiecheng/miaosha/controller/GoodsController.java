@@ -36,7 +36,6 @@ public class GoodsController {
     @RequestMapping("/to_list")
     public String list(Model model,MiaoshaUser user){
         model.addAttribute("user", user);
-
         //查询商品列表
         List<GoodsVo> goodsList = goodsService.listGoodsVo();
         model.addAttribute("goodsList", goodsList);

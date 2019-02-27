@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.lijiecheng.miaosha.dao.GoodsDao;
 import com.lijiecheng.miaosha.domain.MiaoshaGoods;
+import com.lijiecheng.miaosha.exception.GlobalException;
+import com.lijiecheng.miaosha.result.CodeMsg;
 import com.lijiecheng.miaosha.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,9 @@ public class GoodsService {
 	public void reduceStock(GoodsVo goods) {
 		MiaoshaGoods g = new MiaoshaGoods();
 		g.setGoodsId(goods.getId());
-		goodsDao.reduceStock(g);
+		if( goodsDao.reduceStock(g) <=0){
+			throw new GlobalException(CodeMsg.MIAO_SHA_OVER);
+		}
 	}
 	
 	

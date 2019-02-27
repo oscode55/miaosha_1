@@ -34,7 +34,18 @@ public class MiaoshaUserService {
     RedisService redisService;
 
     public MiaoshaUser getById(long id){
-        return miaoshaUserDao.getById(id);
+        //取缓存
+        MiaoshaUser user = redisService.get(MiaoshaUserKey.getById,""+id,MiaoshaUser.class);
+        if(user != null) {
+            return user;
+        }
+        //取数据库
+        user = miaoshaUserDao.getById(id);
+        if(user != null) {
+            redisService.set(MiaoshaUserKey.getById, ""+id, user);
+        }
+
+        return user;
     }
 
     public String login(HttpServletResponse response, LoginVo loginVo){
@@ -88,5 +99,27 @@ public class MiaoshaUserService {
 //        cookie.setMaxAge(MiaoshaUserKey.token.expireSecond());
         cookie.setPath("/");
         response.addCookie(cookie);
+    }
+
+
+    public boolean updatePassword(String token, long id, String formPass) {
+        //取user
+        MiaoshaUser user = getById(id);
+        if(user == null) {
+            throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
+        }
+        //更新数据库 只更新部分字段
+        MiaoshaUser toBeUpdate = new MiaoshaUser();
+        toBeUpdate.setId(id);
+        toBeUpdate.setPassword(MD5Util.formPassToDBPass(formPass, user.getSalt()));
+
+        miaoshaUserDao.update(toBeUpdate);
+
+        //处理缓存
+        redisService.delete(MiaoshaUserKey.getById, ""+id);
+        user.setPassword(toBeUpdate.getPassword());
+        //更新token的值 token存储的是user信息
+        redisService.set(MiaoshaUserKey.token, token, user);
+        return true;
     }
 }

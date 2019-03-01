@@ -1,5 +1,6 @@
 package com.lijiecheng.miaosha.controller;
 
+import com.lijiecheng.miaosha.access.AccessLimit;
 import com.lijiecheng.miaosha.domain.MiaoshaOrder;
 import com.lijiecheng.miaosha.domain.MiaoshaUser;
 import com.lijiecheng.miaosha.rabbitmq.MQSender;
@@ -73,7 +74,7 @@ public class MiaoshaController implements InitializingBean {
 
 	@RequestMapping(value="/reset", method=RequestMethod.GET)
 	@ResponseBody
-	public Result<Boolean> reset(Model model) {
+	public Result<Boolean> reset() {
 		log.info("/miaosha/reset");
 		List<GoodsVo> goodsList = goodsService.listGoodsVo();
 
@@ -194,7 +195,7 @@ public class MiaoshaController implements InitializingBean {
 	}
 
 
-
+	@AccessLimit(seconds=5, maxCount=5, needLogin=true)
 	@RequestMapping(value="/path", method=RequestMethod.GET)
 	@ResponseBody
 	public Result<String> getMiaoshaPath(HttpServletRequest request, MiaoshaUser user,

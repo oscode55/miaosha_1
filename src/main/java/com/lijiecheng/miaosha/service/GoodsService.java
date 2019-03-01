@@ -7,10 +7,12 @@ import com.lijiecheng.miaosha.domain.MiaoshaGoods;
 import com.lijiecheng.miaosha.exception.GlobalException;
 import com.lijiecheng.miaosha.result.CodeMsg;
 import com.lijiecheng.miaosha.vo.GoodsVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class GoodsService {
 	
 	@Autowired
@@ -32,6 +34,7 @@ public class GoodsService {
 	}
 
 	public void resetStock(List<GoodsVo> goodsList) {
+		log.info("数据库-库存重置");
 		for(GoodsVo goods : goodsList ) {
 			MiaoshaGoods g = new MiaoshaGoods();
 			g.setGoodsId(goods.getId());

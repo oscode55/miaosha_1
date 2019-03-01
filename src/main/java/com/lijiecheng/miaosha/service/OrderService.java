@@ -63,7 +63,9 @@ public class OrderService {
 	}
 
 	public void deleteOrders() {
+		log.info("删除订单");
 		orderDao.deleteOrders();
+		log.info("删除秒杀订单");
 		orderDao.deleteMiaoshaOrders();
 	}
 
